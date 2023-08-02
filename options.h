@@ -24,10 +24,6 @@ public:
   /// Indicates if the user has requested help.
   bool wants_help;
 
-  /// Indicates if only log messages describing the would-be patching should be
-  /// produced rather than performing actual patching.
-  bool wants_dry_run;
-
   /// Indicates if the input file should be patched in-place (modified) rather
   /// than creating a separate output file.
   bool wants_in_place;

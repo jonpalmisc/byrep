@@ -14,19 +14,18 @@
 #include <unistd.h>
 
 constexpr auto short_usage =
-    "Usage: byrep [-hd] [-i | -o <path>] [-s <sub> ...] <file> \n";
+    "Usage: byrep [-h] [-i | -o <path>] [-s <sub> ...] <file> \n";
 constexpr auto usage_details = R"(
 Arguments:
-  file          Path of the file to perform patches on
+  file              Input file path
 
 Options:
-  -s <sub>      Byte pattern substitution to perform
-  -o <path>     Path to save the patched output to
+  -s <sub>          Byte pattern substitution to perform (see notes below)
+  -o <path>         Output file path (if not using `-i`)
 
 Flags:
-  -i            Patch input in-place; equivalent to `-o <file>`
-  -d            Only print would-be patch indices
-  -h            Show help and usage
+  -i                Patch the input file in-place (equivalent to `-o <file>`)
+  -h                Show this help and usage message
 
 Notes:
   Substitutions are formatted as two hexadecimal byte patterns joined with a
@@ -45,16 +44,13 @@ void Options::show_usage_and_exit(bool was_requested) {
 }
 
 Options::Options(int argc, char **argv)
-    : wants_help(false), wants_dry_run(false), wants_in_place(false) {
+    : wants_help(false), wants_in_place(false) {
   int opt_char = 0;
-  while ((opt_char = getopt(argc, argv, "hdio:s:")) != -1) {
+  while ((opt_char = getopt(argc, argv, "hio:s:")) != -1) {
     switch (opt_char) {
     case '?':
     case 'h':
       show_usage_and_exit(true);
-      break;
-    case 'd':
-      wants_dry_run = true;
       break;
     case 'i':
       if (!output_path.empty()) {
