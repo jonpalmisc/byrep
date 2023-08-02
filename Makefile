@@ -1,9 +1,12 @@
+PREFIX		?= /usr/local/bin
+
 CXXFLAGS	?= -std=c++20
 CXXFLAGS	+= -Wall -Wextra -Wpedantic -Werror
-CXXFLAGS	+= -g -O1
 
-ifneq ($(ASAN),)
-  CXXFLAGS	+= -fsanitize=address
+ifneq ($(DEBUG),)
+  CXXFLAGS	+= -g -fsanitize=address
+else
+  CXXFLAGS	+= -O2
 endif
 
 # ===----------------------------------------------------------------------=== #
@@ -25,6 +28,10 @@ $(BYREP_T): $(BYREP_O)
 -include $(BYREP_D)
 
 # ===----------------------------------------------------------------------=== #
+
+.PHONY: install
+install: $(BYREP_T)
+	install $(BYREP_T) $(PREFIX)/bin/byrep
 
 .PHONY: clean
 clean:
