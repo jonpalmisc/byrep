@@ -67,7 +67,9 @@ int main(int argc, char **argv) {
 
   Buffer buffer(options.input_path);
   for (auto const &[pattern, replacement] : substitutions)
-    buffer.replace_all(pattern, replacement);
+    buffer.replace_all(pattern, replacement,
+                       options.should_overwrite ? InsertionMode::Overwrite
+                                                : InsertionMode::Insert);
 
   buffer.save(options.wants_in_place ? options.input_path
                                      : options.output_path);

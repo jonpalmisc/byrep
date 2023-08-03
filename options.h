@@ -28,6 +28,9 @@ public:
   /// than creating a separate output file.
   bool wants_in_place;
 
+  /// Indicates if replacements should be done in overwrite mode.
+  bool should_overwrite;
+
   /// Input file path.
   std::string input_path;
 

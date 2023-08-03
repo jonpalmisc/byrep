@@ -25,6 +25,7 @@ Options:
   -o <path>         Output file path (if not using `-i`)
 
 Flags:
+  -R                Perform replacements in overwrite mode
   -i                Patch the input file in-place (equivalent to `-o <file>`)
   -h                Show this help and usage message
 
@@ -45,13 +46,16 @@ void Options::show_usage_and_exit(bool was_requested) {
 }
 
 Options::Options(int argc, char **argv)
-    : wants_help(false), wants_in_place(false) {
+    : wants_help(false), wants_in_place(false), should_overwrite(false) {
   int opt_char = 0;
-  while ((opt_char = getopt(argc, argv, "hio:s:")) != -1) {
+  while ((opt_char = getopt(argc, argv, "hRio:s:")) != -1) {
     switch (opt_char) {
     case '?':
     case 'h':
       show_usage_and_exit(true);
+      break;
+    case 'R':
+      should_overwrite = true;
       break;
     case 'i':
       if (!output_path.empty()) {
