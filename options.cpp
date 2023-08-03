@@ -13,9 +13,10 @@
 
 #include <unistd.h>
 
-constexpr auto short_usage =
-    "Usage: byrep [-h] [-i | -o <path>] [-s <sub> ...] <file> \n";
-constexpr auto usage_details = R"(
+constexpr auto usage =
+    "Usage: byrep [-h] [-i | -o <path>] [-s <sub> ...] <file>\n";
+
+constexpr auto full_usage = R"(
 Arguments:
   file              Input file path
 
@@ -36,9 +37,9 @@ Notes:
 )";
 
 void Options::show_usage_and_exit(bool was_requested) {
-  std::cerr << short_usage;
+  std::cerr << usage;
   if (was_requested)
-    std::cerr << usage_details;
+    std::cerr << full_usage;
 
   std::exit(was_requested ? 0 : 1);
 }
