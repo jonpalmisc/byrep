@@ -31,6 +31,10 @@ public:
   /// Indicates if replacements should be done in overwrite mode.
   bool should_overwrite;
 
+  /// Indicates if log messages describing patch operations as they happen
+  /// should be emitted.
+  bool wants_verbose_output;
+
   /// Input file path.
   std::string input_path;
 

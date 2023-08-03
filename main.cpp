@@ -10,7 +10,9 @@
 #include "buffer.h"
 #include "encoding.h"
 #include "options.h"
+#include "timer.h"
 
+#include <chrono>
 #include <iostream>
 
 using Substitution = std::pair<Bytes, Bytes>;
@@ -44,6 +46,7 @@ SubstitutionParseError parse_substitution(std::string const &literal,
 
 int main(int argc, char **argv) {
   Options options(argc, argv);
+  ScopedTimer::set_logging_enabled(options.wants_verbose_output);
 
   std::vector<Substitution> substitutions(options.substitutions.size());
   for (size_t i = 0; i < substitutions.size(); ++i) {
@@ -65,14 +68,35 @@ int main(int argc, char **argv) {
     }
   }
 
-  Buffer buffer(options.input_path);
-  for (auto const &[pattern, replacement] : substitutions)
-    buffer.replace_all(pattern, replacement,
-                       options.should_overwrite ? InsertionMode::Overwrite
-                                                : InsertionMode::Insert);
+  ScopedTimer global_timer("All operations finished");
 
-  buffer.save(options.wants_in_place ? options.input_path
-                                     : options.output_path);
+  Buffer buffer;
+  {
+    ScopedTimer timer("Input file loaded");
+    buffer.load(options.input_path);
+  }
+  {
+    ScopedTimer timer("All substitutions performed");
+
+    auto sub_index = 0;
+    for (auto const &[pattern, replacement] : substitutions) {
+      ++sub_index;
+
+      auto mode = options.should_overwrite ? InsertionMode::Overwrite
+                                           : InsertionMode::Insert;
+      auto indices = buffer.replace_all(pattern, replacement, mode);
+
+      if (options.wants_verbose_output)
+        for (auto index : indices)
+          std::cout << "Substitution " << sub_index << " performed at offset 0x"
+                    << std::hex << index << std::dec << ".\n";
+    }
+  }
+  {
+    ScopedTimer timer("Output file saved");
+    buffer.save(options.wants_in_place ? options.input_path
+                                       : options.output_path);
+  }
 
   return 0;
 }

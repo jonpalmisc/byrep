@@ -11,10 +11,15 @@
 
 #include <fstream>
 
-Buffer::Buffer(std::string path) : m_path(std::move(path)) {
-  std::ifstream file(m_path, std::ios::binary);
+void Buffer::load(std::string const &path) {
+  std::ifstream file(path, std::ios::binary);
   m_data = Bytes{std::istreambuf_iterator<char>(file),
                  std::istreambuf_iterator<char>()};
+}
+
+void Buffer::save(std::string const &path) const {
+  std::ofstream file(path, std::ios::binary);
+  std::copy(m_data.begin(), m_data.end(), std::ostreambuf_iterator<char>(file));
 }
 
 std::optional<Bytes::size_type> Buffer::replace_next(Bytes const &pattern,
@@ -58,9 +63,4 @@ std::vector<Bytes::size_type> Buffer::replace_all(Bytes const &pattern,
   }
 
   return replacement_indices;
-}
-
-void Buffer::save(std::string const &path) const {
-  std::ofstream file(path, std::ios::binary);
-  std::copy(m_data.begin(), m_data.end(), std::ostreambuf_iterator<char>(file));
 }

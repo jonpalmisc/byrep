@@ -26,12 +26,10 @@ using Bytes = std::vector<std::uint8_t>;
 
 /// Arbitrary binary data buffer.
 class Buffer {
-  std::string m_path;
   Bytes m_data;
 
 public:
-  /// Create a new buffer from the file at \p path.
-  Buffer(std::string path);
+  Buffer() = default;
 
   /// Get the bytes contained by the buffer.
   Bytes const &content() const { return m_data; };
@@ -41,6 +39,12 @@ public:
 
   /// Get the size of the buffer in bytes.
   Bytes::size_type size() const { return m_data.size(); };
+
+  /// Load the buffer with the contents of the file at \p path.
+  void load(std::string const &path);
+
+  /// Save the buffer's contents to the file at \p path.
+  void save(std::string const &path) const;
 
   /// Replace the next occurance of \p pattern with \p replacement.
   ///
@@ -61,7 +65,4 @@ public:
   std::vector<Bytes::size_type>
   replace_all(Bytes const &pattern, Bytes const &replacement,
               InsertionMode mode = InsertionMode::Insert);
-
-  /// Save the buffer's contents to the file at \p path.
-  void save(std::string const &path) const;
 };
