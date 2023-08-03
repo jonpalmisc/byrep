@@ -1,4 +1,4 @@
-PREFIX		?= /usr/local/bin
+PREFIX		?= /usr/local
 
 CXXFLAGS	?= -std=c++20
 CXXFLAGS	+= -Wall -Wextra -Wpedantic -Werror
