@@ -1,22 +1,21 @@
-//===-- options.cpp - Program options interface ---------------------------===//
 //
-// Copyright (c) 2023 Jon Palmisciano. All rights reserved.
+//  Copyright (c) 2023-2024 Jon Palmisciano. All rights reserved.
 //
-// Use of this source code is governed by the BSD 3-Clause license; a full copy
-// of the license can be found in the LICENSE.txt file.
+//  Use of this source code is governed by the BSD 3-Clause license; a full copy
+//  of the license can be found in the LICENSE.txt file.
 //
-//===----------------------------------------------------------------------===//
 
 #include "options.h"
 
 #include <iostream>
 
+// I don't care about Windows.
 #include <unistd.h>
 
-constexpr auto usage =
+constexpr auto USAGE =
     "Usage: byrep [-hv] [-i | -o <path>] [-s <sub> ...] <file>\n";
 
-constexpr auto full_usage = R"(
+constexpr auto USAGE_BODY = R"(
 Arguments:
   file              Input file path
 
@@ -25,7 +24,6 @@ Options:
   -o <path>         Output file path (if not using `-i`)
 
 Flags:
-  -v                Enable verbose output (log performed operations in realtime)
   -R                Perform replacements in overwrite mode
   -i                Patch the input file in-place (equivalent to `-o <file>`)
   -h                Show this help and usage message
@@ -39,25 +37,21 @@ Notes:
 )";
 
 void Options::show_usage_and_exit(bool was_requested) {
-  std::cerr << usage;
+  std::cerr << USAGE;
   if (was_requested)
-    std::cerr << full_usage;
+    std::cerr << USAGE_BODY;
 
   std::exit(was_requested ? 0 : 1);
 }
 
 Options::Options(int argc, char **argv)
-    : wants_help(false), wants_in_place(false), should_overwrite(false),
-      wants_verbose_output(false) {
+    : wants_help(false), wants_in_place(false), should_overwrite(false) {
   int opt_char = 0;
   while ((opt_char = getopt(argc, argv, "hvRio:s:")) != -1) {
     switch (opt_char) {
     case '?':
     case 'h':
       show_usage_and_exit(true);
-      break;
-    case 'v':
-      wants_verbose_output = true;
       break;
     case 'R':
       should_overwrite = true;
@@ -77,7 +71,7 @@ Options::Options(int argc, char **argv)
       output_path = optarg;
       break;
     case 's':
-      substitutions.emplace_back(optarg);
+      subs.emplace_back(optarg);
       break;
     default:
       show_usage_and_exit(false);

@@ -1,15 +1,14 @@
-//===-- options.h - Program options interface -----------------------------===//
 //
-// Copyright (c) 2023 Jon Palmisciano. All rights reserved.
+//  Copyright (c) 2023-2024 Jon Palmisciano. All rights reserved.
 //
-// Use of this source code is governed by the BSD 3-Clause license; a full copy
-// of the license can be found in the LICENSE.txt file.
+//  Use of this source code is governed by the BSD 3-Clause license; a full copy
+//  of the license can be found in the LICENSE.txt file.
 //
-//===----------------------------------------------------------------------===//
 
 #pragma once
 
 #include <string>
+#include <vector>
 
 /// Program options.
 class Options {
@@ -31,10 +30,6 @@ public:
   /// Indicates if replacements should be done in overwrite mode.
   bool should_overwrite;
 
-  /// Indicates if log messages describing patch operations as they happen
-  /// should be emitted.
-  bool wants_verbose_output;
-
   /// Input file path.
   std::string input_path;
 
@@ -42,7 +37,7 @@ public:
   std::string output_path;
 
   /// List of substitutions (in literal form).
-  std::vector<std::string> substitutions;
+  std::vector<std::string> subs;
 
   /// Create an options instance by parsing CLI arguments.
   Options(int argc, char **argv);
