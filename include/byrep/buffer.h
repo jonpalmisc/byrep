@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+namespace byrep {
+
 /// Defines how a substitution should be performed.
 enum class SubMode {
   /// Insert data without modifying any existing/subsequent data.
@@ -62,3 +64,5 @@ public:
   std::vector<size_t> replace_all(Bytes const &pat, Bytes const &rep,
                                   SubMode mode = SubMode::Insert);
 };
+
+} // namespace byrep

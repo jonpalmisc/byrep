@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+namespace byrep {
+
 using Bytes = std::vector<uint8_t>;
 
 /// Hexadecimal encoding utilities.
@@ -20,3 +22,5 @@ public:
   /// \returns The decoded bytes if successful, or an empty vector on failure
   static Bytes decode(std::string const &input);
 };
+
+} // namespace byrep

@@ -5,7 +5,9 @@
 //  of the license can be found in the LICENSE.txt file.
 //
 
-#include "encoding.h"
+#include "byrep/encoding.h"
+
+namespace byrep {
 
 Bytes Hex::decode(std::string const &hex_string) {
   auto input_size = hex_string.size();
@@ -24,3 +26,5 @@ Bytes Hex::decode(std::string const &hex_string) {
 
   return result;
 }
+
+} // namespace byrep

@@ -5,9 +5,11 @@
 //  of the license can be found in the LICENSE.txt file.
 //
 
-#include "buffer.h"
+#include "byrep/buffer.h"
 
 #include <fstream>
+
+namespace byrep {
 
 void Buffer::load(std::string const &path) {
   std::ifstream file(path, std::ios::binary);
@@ -57,3 +59,5 @@ std::vector<size_t> Buffer::replace_all(Bytes const &pat, Bytes const &rep,
 
   return rep_indices;
 }
+
+} // namespace byrep

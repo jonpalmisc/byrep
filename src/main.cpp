@@ -5,11 +5,13 @@
 //  of the license can be found in the LICENSE.txt file.
 //
 
-#include "buffer.h"
-#include "encoding.h"
+#include "byrep/buffer.h"
+#include "byrep/encoding.h"
 #include "options.h"
 
 #include <iostream>
+
+using namespace byrep;
 
 /// Find-and-replace substitution.
 using Sub = std::pair<Bytes, Bytes>;
